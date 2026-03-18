@@ -1,29 +1,40 @@
 
-# Bintang Akbar Ramadhan — Portfolio
+# Bintang Akbar Ramadhan - Portfolio
 
-Personal portfolio website built with vanilla HTML, CSS, and JavaScript. No frameworks, no build tools — just clean code with GSAP animations.
+> Personal portfolio website. Vanilla HTML, CSS, and JavaScript. No frameworks, no build tools.
+
+<br />
 
 ## Preview
+
 https://github.com/user-attachments/assets/1f7df823-d992-47a0-8710-ad64ded94328
 
-## Tech Stack
+<br />
 
-- **HTML5** — semantic structure
-- **CSS3** — custom properties, grid, flexbox, responsive design
-- **JavaScript** — vanilla JS, no dependencies
-- **GSAP** — animations (loader, scroll, scramble text)
+## Built With
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=flat-square&logo=greensock&logoColor=black)
+
+<br />
 
 ## Features
 
-- Loader animation with progress counter
-- Custom cursor with magnetic effect
-- Text scramble animation on hero section
-- Scroll-triggered animations via GSAP ScrollTrigger
-- Spotlight canvas effect on hero
-- Typewriter role text
-- 3D tilt card on about section
-- Responsive with mobile hamburger menu
-- Scroll progress indicator
+| Feature | Description |
+|---|---|
+| Loader | Progress counter animation on page load |
+| Custom Cursor | Dot + ring cursor with hover and click states |
+| Text Scramble | Randomized character reveal on hero heading |
+| Scroll Animations | Entrance animations via GSAP ScrollTrigger |
+| Spotlight | Radial canvas glow that follows the cursor on hero |
+| Typewriter | Cycling role text with typing and deleting effect |
+| 3D Tilt | Mouse-reactive tilt on profile card |
+| Hamburger Menu | Mobile navigation drawer |
+| Scroll Progress | Thin bar indicator at top of page |
+
+<br />
 
 ## Structure
 
@@ -34,8 +45,18 @@ portfolio/
 └── script.js    # all javascript
 ```
 
+<br />
+
 ## Projects Featured
 
-- [Arcthogus](https://arcthogus.arwebs.my.id) — Esports organization website built with Next.js, React, TypeScript, and Supabase
-- [PDFKit](https://pdf.arwebs.my.id) — Privacy-first PDF toolkit that runs entirely in the browser
-- [Waroong](https://waroong-dashboard.arwebs.my.id) — POS app for Indonesian small businesses, built with Laravel and FilamentPHP
+| Project | Stack | Link |
+|---|---|---|
+| Arcthogus | Next.js, TypeScript, Supabase | [arcthogus.arwebs.my.id](https://arcthogus.arwebs.my.id) |
+| PDFKit | JavaScript, Browser API | [pdf.arwebs.my.id](https://pdf.arwebs.my.id) |
+| Waroong | Laravel, FilamentPHP | [waroong-dashboard.arwebs.my.id](https://waroong-dashboard.arwebs.my.id) |
+
+<br />
+
+---
+
+<p align="center">Made by <a href="https://github.com/akbarr13">Bintang Akbar Ramadhan</a></p>
