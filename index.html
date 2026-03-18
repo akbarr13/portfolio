@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bintang Akbar Ramadhan — Full Stack Developer</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;0,800;0,900;1,900&family=Space+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <!-- LOADER -->
+        <div id="loader" aria-hidden="true">
+            <div style="display: flex; align-items: baseline; gap: 14px">
+                <span
+                    id="ln1"
+                    style="
+                        font-family: &quot;Space Mono&quot;, monospace;
+                        font-size: clamp(13px, 1.8vw, 18px);
+                        font-weight: 700;
+                        letter-spacing: 4px;
+                        color: #666;
+                        text-transform: uppercase;
+                    "
+                    >wait for</span
+                >
+                <span id="ln2" style="display: none"></span>
+                <span
+                    id="ln3"
+                    style="
+                        font-family: &quot;Archivo&quot;, sans-serif;
+                        font-size: clamp(36px, 6vw, 72px);
+                        font-weight: 900;
+                        letter-spacing: -2px;
+                        color: var(--accent);
+                        font-style: italic;
+                        line-height: 1;
+                    "
+                    >IT.</span
+                >
+            </div>
+            <div class="loader-bar-wrap">
+                <div class="loader-bar" id="loader-bar"></div>
+            </div>
+            <div class="loader-count" id="loader-count">000</div>
+        </div>
+
+        <!-- CURSOR -->
+        <div id="cursor" aria-hidden="true">
+            <div class="cursor-ring" id="cursor-ring"></div>
+            <div class="cursor-dot" id="cursor-dot"></div>
+        </div>
+
+        <!-- SCROLL PROGRESS -->
+        <div id="progress-bar" role="progressbar" aria-hidden="true"></div>
+
+        <!-- NAV -->
+        <nav role="navigation" aria-label="Main">
+            <a href="#hero" class="nav-logo">BAR<em>.</em></a>
+            <div class="nav-links">
+                <a href="#projects">Proyek</a>
+                <a href="#about">Tentang</a>
+                <a href="#skills">Keahlian</a>
+                <a href="#contact">Kontak</a>
+            </div>
+            <button
+                class="hamburger"
+                id="hamburger"
+                aria-label="Toggle menu"
+                aria-expanded="false"
+            >
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <!-- MOBILE DRAWER -->
+        <div
+            class="mobile-drawer"
+            id="mobile-drawer"
+            role="dialog"
+            aria-label="Mobile menu"
+        >
+            <a href="#projects" class="drawer-link">Proyek</a>
+            <a href="#about" class="drawer-link">Tentang</a>
+            <a href="#skills" class="drawer-link">Keahlian</a>
+            <a href="#contact" class="drawer-link">Kontak</a>
+        </div>
+
+        <!-- HERO -->
+        <section id="hero">
+            <canvas id="spotlight-canvas"></canvas>
+
+            <div class="learning-badge" id="learning-badge">
+                <span class="learning-badge-dot" aria-hidden="true"></span>
+                Currently Learning — <span>Cyber Security</span>
+            </div>
+
+            <div class="hero-eyebrow" id="hero-eyebrow">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span class="eyebrow-name"
+                    >Bintang
+                    <em style="font-style: italic; color: var(--accent)"
+                        >Akbar</em
+                    >
+                    Ramadhan</span
+                >
+                <span class="eyebrow-role">— Full Stack Developer</span>
+            </div>
+
+            <h1 class="hero-name" aria-label="Build Things That Work">
+                <span class="hero-line"><span id="hl1">BUILD</span></span>
+                <span class="hero-line"><span id="hl2">THINGS</span></span>
+                <span class="hero-line hero-line-accent"
+                    ><span id="hl3">THAT WORK</span></span
+                >
+            </h1>
+
+            <div class="hero-bottom">
+                <div class="hero-left">
+                    <div class="hero-role">
+                        <span class="hero-role-dash">—</span>
+                        <span class="hero-role-text" id="typed-role"></span
+                        ><span class="typed-cursor" aria-hidden="true"></span>
+                    </div>
+                    <p class="hero-desc" id="hero-desc">
+                        Saya mengubah ide menjadi produk digital yang solid.
+                        Dari arsitektur backend hingga detail antarmuka, setiap
+                        baris kode ditulis dengan tujuan yang jelas.
+                    </p>
+                </div>
+                <div class="hero-cta" id="hero-cta">
+                    <a
+                        href="#projects"
+                        class="btn-magnetic btn-fill"
+                        aria-label="Lihat proyek saya"
+                    >
+                        Lihat Proyek
+                        <svg
+                            class="btn-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M7 17L17 7" />
+                            <path d="M7 7h10v10" />
+                        </svg>
+                    </a>
+                    <a
+                        href="#contact"
+                        class="btn-magnetic btn-outline"
+                        aria-label="Hubungi saya"
+                    >
+                        Hubungi Saya
+                        <svg
+                            class="btn-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M7 17L17 7" />
+                            <path d="M7 7h10v10" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARQUEE 1 -->
+        <div class="marquee-section" aria-hidden="true">
+            <div class="marquee-track">
+                <span class="marquee-item"
+                    >Next.js <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >TypeScript <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Laravel <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Flutter <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >FilamentPHP <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Python <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Astro <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Supabase <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Next.js <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >TypeScript <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Laravel <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Flutter <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >FilamentPHP <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Python <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Astro <span class="marquee-dot"></span
+                ></span>
+                <span class="marquee-item"
+                    >Supabase <span class="marquee-dot"></span
+                ></span>
+            </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+            <div class="projects-header">
+                <div>
+                    <div class="section-label">Karya Pilihan</div>
+                    <h2 class="projects-title">
+                        PROYEK<br /><em
+                            style="font-style: italic; color: var(--accent)"
+                            >TERBAIK</em
+                        >
+                    </h2>
+                </div>
+                <div class="projects-count">03 proyek</div>
+            </div>
+
+            <div class="project-list" role="list">
+                <a
+                    class="project-item"
+                    role="listitem"
+                    tabindex="0"
+                    aria-label="Arcthogus"
+                    href="https://arcthogus.arwebs.my.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <span class="project-num">01</span>
+                    <div>
+                        <div class="project-name">Arcthogus</div>
+                        <div class="project-tags">
+                            <span>Next.js</span><span>/</span><span>React</span
+                            ><span>/</span><span>TypeScript</span><span>/</span
+                            ><span>Supabase</span>
+                        </div>
+                    </div>
+                    <div class="project-arrow" aria-hidden="true">↗</div>
+                </a>
+                <a
+                    class="project-item"
+                    role="listitem"
+                    tabindex="0"
+                    aria-label="PDFKit"
+                    href="https://pdf.arwebs.my.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <span class="project-num">02</span>
+                    <div>
+                        <div class="project-name">PDFKit</div>
+                        <div class="project-tags">
+                            <span>JavaScript</span><span>/</span
+                            ><span>Browser API</span><span>/</span
+                            ><span>Privacy-first</span>
+                        </div>
+                    </div>
+                    <div class="project-arrow" aria-hidden="true">↗</div>
+                </a>
+                <a
+                    class="project-item"
+                    role="listitem"
+                    tabindex="0"
+                    aria-label="Waroong"
+                    href="https://waroong-dashboard.arwebs.my.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <span class="project-num">03</span>
+                    <div>
+                        <div class="project-name">Waroong</div>
+                        <div class="project-tags">
+                            <span>Laravel</span><span>/</span
+                            ><span>FilamentPHP</span><span>/</span
+                            ><span>Multi-tenant</span>
+                        </div>
+                    </div>
+                    <div class="project-arrow" aria-hidden="true">↗</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- MARQUEE 2 -->
+        <div class="marquee-section" aria-hidden="true">
+            <div class="marquee-track rev">
+                <span class="marquee-item" style="color: #333"
+                    >BINTANG AKBAR RAMADHAN
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >FULL STACK DEVELOPER
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >BANDUNG, INDONESIA
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >OPEN TO WORK
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >BINTANG AKBAR RAMADHAN
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >FULL STACK DEVELOPER
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >BANDUNG, INDONESIA
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+                <span class="marquee-item" style="color: #333"
+                    >OPEN TO WORK
+                    <span class="marquee-dot" style="background: #2a2a2a"></span
+                ></span>
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <div class="about-left">
+                <div class="section-label">Tentang Saya</div>
+                <h2 class="about-big">
+                    BINTANG<br /><em>AKBAR</em><br />RAMADHAN
+                </h2>
+                <div class="about-body">
+                    <p>
+                        Full Stack Developer asal Bandung yang fokus membangun
+                        produk digital dari awal sampai selesai. Bukan sekadar
+                        berjalan, tapi terasa solid dan terawat.
+                    </p>
+                    <p>
+                        Saya terbiasa bekerja di dua sisi sekaligus: backend
+                        yang rapi dan frontend yang detail. Karena hasil yang
+                        baik datang dari keduanya, bukan salah satu.
+                    </p>
+                    <p>
+                        Di luar proyek, saya senang mengeksplorasi teknologi
+                        baru dan terus belajar hal-hal yang belum saya kuasai.
+                    </p>
+                </div>
+
+                <div class="about-stats" style="margin-top: 40px">
+                    <div class="stat-item">
+                        <div class="stat-num" data-target="3">0</div>
+                        <div class="stat-label">Tahun Exp.</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" data-target="20">0</div>
+                        <div class="stat-label">Proyek</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" data-target="15">0</div>
+                        <div class="stat-label">Klien</div>
+                    </div>
+                    <div class="stat-item" style="background: var(--accent)">
+                        <div class="stat-num" style="color: #0c0c0c">100%</div>
+                        <div
+                            class="stat-label"
+                            style="color: rgba(0, 0, 0, 0.4)"
+                        >
+                            On Time
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-right">
+                <div class="about-photo" id="tilt-card">
+                    <div class="about-photo-placeholder">
+                        <svg
+                            width="56"
+                            height="56"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="0.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-label="Placeholder foto profil"
+                        >
+                            <path
+                                d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                            />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span
+                            style="
+                                font-family: &quot;Space Mono&quot;, monospace;
+                                font-size: 9px;
+                                letter-spacing: 2px;
+                                text-transform: uppercase;
+                                color: #2a2a2a;
+                            "
+                            >My Photo (blm ada)</span
+                        >
+                    </div>
+                    <div class="about-photo-badge">Open to Work</div>
+                </div>
+
+                <div class="about-info">
+                    <div class="about-info-row">
+                        <span>Nama</span>
+                        <span>Bintang Akbar Ramadhan</span>
+                    </div>
+                    <div class="about-info-row">
+                        <span>Role</span>
+                        <span>Full Stack Developer</span>
+                    </div>
+                    <div class="about-info-row">
+                        <span>Lokasi</span>
+                        <span>Bandung, Indonesia</span>
+                    </div>
+                    <div class="about-info-row">
+                        <span>Status</span>
+                        <span style="color: #22c55e">Tersedia &#x2714;</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills">
+            <div class="section-label">Tech Stack</div>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-cat">Frontend</div>
+                    Next.js
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Frontend</div>
+                    TypeScript
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Frontend</div>
+                    JavaScript
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Frontend</div>
+                    Astro
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Frontend</div>
+                    CSS / SCSS
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Backend</div>
+                    Laravel
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Backend</div>
+                    FilamentPHP
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Backend</div>
+                    PHP
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Backend</div>
+                    Python
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Mobile</div>
+                    Flutter
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Mobile</div>
+                    Kotlin
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Database</div>
+                    MySQL
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Database</div>
+                    Supabase
+                </div>
+                <div class="skill-item">
+                    <div class="skill-cat">Security</div>
+                    CTF
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+            <div class="contact-pre">Ada Proyek? Ayo Ngobrol</div>
+            <div class="contact-big">
+                <span>BIKIN</span>
+                <span><em>SESUATU</em></span>
+                <span>BARENG</span>
+            </div>
+            <a
+                href="mailto:hello@arwebs.my.id"
+                class="contact-email"
+                aria-label="Kirim email ke hello@arwebs.my.id"
+            >
+                hello@arwebs.my.id
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M7 17L17 7" />
+                    <path d="M7 7h10v10" />
+                </svg>
+            </a>
+            <div class="contact-socials">
+                <a
+                    href="https://github.com/akbarr13"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >GitHub</a
+                >
+                <span aria-hidden="true">—</span>
+                <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >LinkedIn</a
+                >
+                <span aria-hidden="true">—</span>
+                <a
+                    href="https://instagram.com/akbarrsmh"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Instagram</a
+                >
+                <span aria-hidden="true">—</span>
+                <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Discord</a
+                >
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <span>Bintang Akbar Ramadhan &copy; 2026</span>
+            <span>Bandung, Indonesia</span>
+            <span>Full Stack Developer</span>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
