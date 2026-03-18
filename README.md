@@ -1,11 +1,10 @@
+
 # Bintang Akbar Ramadhan — Portfolio
 
 Personal portfolio website built with vanilla HTML, CSS, and JavaScript. No frameworks, no build tools — just clean code with GSAP animations.
 
 ## Preview
-
-<!-- Masukkan gambar di sini -->
-<!-- ![Preview](./preview.png) -->
+https://github.com/user-attachments/assets/1f7df823-d992-47a0-8710-ad64ded94328
 
 ## Tech Stack
 
