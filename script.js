@@ -62,10 +62,14 @@ let mouseX = 0,
   ringX = 0,
   ringY = 0;
 
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 document.addEventListener("mousemove", (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
-  gsap.to(dot, { x: mouseX, y: mouseY, duration: 0.08, ease: "none" });
+  if (!prefersReducedMotion) {
+    gsap.to(dot, { x: mouseX, y: mouseY, duration: 0.08, ease: "none" });
+  }
 });
 document.addEventListener("mousedown", () =>
   document.body.classList.add("clicking"),
@@ -74,15 +78,19 @@ document.addEventListener("mouseup", () =>
   document.body.classList.remove("clicking"),
 );
 
-(function updateRing() {
-  ringX += (mouseX - ringX) * 0.1;
-  ringY += (mouseY - ringY) * 0.1;
-  gsap.set(ring, { x: ringX, y: ringY });
-  requestAnimationFrame(updateRing);
-})();
+if (!prefersReducedMotion) {
+  (function updateRing() {
+    ringX += (mouseX - ringX) * 0.1;
+    ringY += (mouseY - ringY) * 0.1;
+    gsap.set(ring, { x: ringX, y: ringY });
+    requestAnimationFrame(updateRing);
+  })();
+}
 
 document
-  .querySelectorAll('a, button, [tabindex="0"], .project-item, .skill-item')
+  .querySelectorAll(
+    'a, button, [tabindex="0"], .project-item, .skill-item',
+  )
   .forEach((el) => {
     el.addEventListener("mouseenter", () =>
       document.body.classList.add("hovering"),
@@ -104,48 +112,125 @@ window.addEventListener(
   { passive: true },
 );
 
-// ─── SPOTLIGHT CANVAS ───
-const canvas = document.getElementById("spotlight-canvas");
-const ctx = canvas.getContext("2d");
-let spotX = -999,
-  spotY = -999;
-let spotVisible = false;
-
-function resizeCanvas() {
+// ─── THREE.JS HERO SCENE ───
+function initThreeScene() {
   const hero = document.getElementById("hero");
-  canvas.width = hero.offsetWidth;
-  canvas.height = hero.offsetHeight;
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+  const canvas = document.getElementById("three-canvas");
+  if (!canvas || typeof THREE === "undefined") return;
 
-document.getElementById("hero").addEventListener("mousemove", (e) => {
-  const rect = canvas.getBoundingClientRect();
-  spotX = e.clientX - rect.left;
-  spotY = e.clientY - rect.top;
-  if (!spotVisible) {
-    spotVisible = true;
-    canvas.style.opacity = "1";
-  }
-});
-document.getElementById("hero").addEventListener("mouseleave", () => {
-  spotVisible = false;
-  canvas.style.opacity = "0";
-});
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    hero.offsetWidth / hero.offsetHeight,
+    0.1,
+    1000,
+  );
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+  });
+  renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-function drawSpotlight() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (spotVisible) {
-    const grad = ctx.createRadialGradient(spotX, spotY, 0, spotX, spotY, 320);
-    grad.addColorStop(0, "rgba(212,255,0,0.055)");
-    grad.addColorStop(0.5, "rgba(212,255,0,0.02)");
-    grad.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const accentHex = 0xd4ff00;
+
+  // Store materials for theme switching
+  const materials = [];
+
+  function makeMat(opacity) {
+    const m = new THREE.MeshBasicMaterial({
+      color: accentHex,
+      wireframe: true,
+      transparent: true,
+      opacity,
+    });
+    materials.push(m);
+    return m;
   }
-  requestAnimationFrame(drawSpotlight);
+
+  const ico = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(2.2, 1),
+    makeMat(0.12),
+  );
+  const octa = new THREE.Mesh(
+    new THREE.OctahedronGeometry(1.6, 0),
+    makeMat(0.09),
+  );
+  const torus = new THREE.Mesh(
+    new THREE.TorusGeometry(1.8, 0.3, 8, 24),
+    makeMat(0.07),
+  );
+
+  ico.position.set(4, 1.5, -4);
+  octa.position.set(-3.5, -1.5, -5);
+  torus.position.set(0.5, -0.5, -6);
+
+  scene.add(ico, octa, torus);
+
+  // Particles
+  const pCount = 60;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(pCount * 3);
+  for (let i = 0; i < pCount * 3; i++) {
+    pPos[i] = (Math.random() - 0.5) * 18;
+  }
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+  const pMat = new THREE.PointsMaterial({
+    color: accentHex,
+    size: 0.035,
+    transparent: true,
+    opacity: 0.4,
+  });
+  materials.push(pMat);
+  const particles = new THREE.Points(pGeo, pMat);
+  scene.add(particles);
+
+  camera.position.z = 6;
+
+  let mx = 0,
+    my = 0;
+  hero.addEventListener("mousemove", (e) => {
+    const rect = hero.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    my = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  });
+  hero.addEventListener("mouseleave", () => {
+    mx = 0;
+    my = 0;
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.0008;
+
+    ico.rotation.x = t * 0.4 + my * 0.3;
+    ico.rotation.y = t * 0.5 + mx * 0.3;
+
+    octa.rotation.x = t * 0.3 - my * 0.2;
+    octa.rotation.z = t * 0.4 - mx * 0.2;
+
+    torus.rotation.x = t * 0.35 + my * 0.15;
+    torus.rotation.y = t * 0.45 + mx * 0.15;
+
+    particles.rotation.y = t * 0.05;
+    particles.rotation.x = my * 0.03;
+
+    camera.position.x += (mx * 0.6 - camera.position.x) * 0.015;
+    camera.position.y += (-my * 0.4 - camera.position.y) * 0.015;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener("resize", () => {
+    camera.aspect = hero.offsetWidth / hero.offsetHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+  });
 }
-drawSpotlight();
+initThreeScene();
 
 // ─── TYPED ROLE ───
 const roles = [
@@ -259,7 +344,7 @@ function initAnimations() {
     line.style.height = line.offsetHeight + "px";
   });
   const scrambleTargets = { hl1: "BUILD", hl2: "THINGS", hl3: "THAT WORK" };
-  ["hl1", "hl2", "hl3"].forEach((id, i) => {
+  ["hl1", "hl2", "hl3"].forEach((id) => {
     const el = document.getElementById(id);
     const final = scrambleTargets[id];
     el.textContent = final;
@@ -305,7 +390,8 @@ function initAnimations() {
     duration: 0.9,
     ease: "power3.out",
   });
-  document.querySelectorAll(".project-item").forEach((el, i) => {
+  const projectItems = document.querySelectorAll(".project-item");
+  projectItems.forEach((el, i) => {
     gsap.from(el, {
       scrollTrigger: { trigger: el, start: "top 88%" },
       x: -36,
@@ -372,7 +458,8 @@ function initAnimations() {
   });
 
   // Skills
-  document.querySelectorAll(".skill-item").forEach((el, i) => {
+  const skillItems = document.querySelectorAll(".skill-item");
+  skillItems.forEach((el, i) => {
     gsap.from(el, {
       scrollTrigger: { trigger: el, start: "top 92%" },
       y: 24,
@@ -403,7 +490,8 @@ function initAnimations() {
   });
 
   // Section labels
-  document.querySelectorAll(".section-label").forEach((el) => {
+  const sectionLabels = document.querySelectorAll(".section-label");
+  sectionLabels.forEach((el) => {
     gsap.from(el, {
       scrollTrigger: { trigger: el, start: "top 92%" },
       x: -18,
@@ -446,8 +534,71 @@ document.querySelectorAll(".drawer-link").forEach((link) => {
 });
 
 // ─── KEYBOARD ACCESS ───
-document.querySelectorAll(".project-item").forEach((item) => {
+const allProjectItems = document.querySelectorAll(".project-item");
+allProjectItems.forEach((item) => {
   item.addEventListener("keydown", (e) => {
     if (e.key === "Enter") item.click();
   });
+});
+
+// ─── PROJECT PREVIEW (cursor-follow on hover) ───
+const preview = document.getElementById("project-preview");
+const previewInner = document.getElementById("project-preview-inner");
+
+if (preview && previewInner && window.matchMedia("(min-width: 769px)").matches) {
+  allProjectItems.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      const img = item.dataset.img;
+      if (img) {
+        previewInner.style.background = "";
+        previewInner.innerHTML = `<img src="${img}" alt="${item.dataset.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+        preview.classList.add("visible");
+      }
+    });
+
+    item.addEventListener("mousemove", (e) => {
+      const pw = 420, ph = 260;
+      const x = e.clientX + 32;
+      const y = e.clientY - ph / 2;
+      const clampedX = Math.min(x, window.innerWidth - pw - 16);
+      const clampedY = Math.max(16, Math.min(y, window.innerHeight - ph - 16));
+      preview.style.left = clampedX + "px";
+      preview.style.top = clampedY + "px";
+    });
+
+    item.addEventListener("mouseleave", () => {
+      preview.classList.remove("visible");
+    });
+  });
+}
+
+// ─── ACTIVE NAV LINK ───
+const navLinks = document.querySelectorAll(".nav-links a");
+const sections = ["#hero", "#projects", "#about", "#skills", "#contact"];
+
+sections.forEach((selector) => {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  ScrollTrigger.create({
+    trigger: el,
+    start: "top 50%",
+    end: "bottom 50%",
+    onEnter: () => setActiveNav(selector),
+    onEnterBack: () => setActiveNav(selector),
+  });
+});
+
+function setActiveNav(sectionHref) {
+  navLinks.forEach((link) => {
+    link.classList.toggle("active", link.getAttribute("href") === sectionHref);
+  });
+}
+
+// ─── BACK TO TOP ───
+const backToTop = document.getElementById("back-to-top");
+window.addEventListener("scroll", () => {
+  backToTop.classList.toggle("visible", window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
