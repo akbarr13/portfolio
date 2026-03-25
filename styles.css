@@ -1139,6 +1139,13 @@ footer span {
 }
 
 /* ─── EXTRA SMALL ─── */
+@media (max-width: 375px) {
+    /* Force "WORK" to always wrap to a new line during & after scramble */
+    #hl3 {
+        word-spacing: 9999px;
+    }
+}
+
 @media (max-width: 400px) {
     .hero-cta {
         flex-wrap: wrap;
