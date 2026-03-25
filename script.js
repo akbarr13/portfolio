@@ -268,7 +268,6 @@ function typeRole() {
 // ─── TEXT SCRAMBLE ───
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 function scramble(el, finalText, duration = 1200) {
-  el.style.whiteSpace = "nowrap";
   let frame = 0;
   const totalFrames = duration / 16;
   const interval = setInterval(() => {
@@ -290,7 +289,6 @@ function scramble(el, finalText, duration = 1200) {
     frame++;
     if (frame >= totalFrames) {
       el.textContent = finalText;
-      el.style.whiteSpace = "";
       clearInterval(interval);
     }
   }, 16);
@@ -339,10 +337,7 @@ function initAnimations() {
     delay: 0.05,
   });
 
-  // Name scramble — lock line heights first to prevent layout jitter
-  document.querySelectorAll(".hero-line").forEach((line) => {
-    line.style.height = line.offsetHeight + "px";
-  });
+  // Name scramble
   const scrambleTargets = { hl1: "BUILD", hl2: "THINGS", hl3: "THAT WORK" };
   ["hl1", "hl2", "hl3"].forEach((id) => {
     const el = document.getElementById(id);
